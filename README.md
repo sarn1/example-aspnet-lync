@@ -5,6 +5,7 @@ https://teamtreehouse.com/library/querying-with-linq/
 #### What You'll Learn ####
 - Lync Queries
 - Delegates (aka Anonymous Functions in PHP) Types (part of functional programming), turning functionals into variables to be passed around.
+- Lync Quantifiers Operators
 
 ### Lync ###
 
@@ -132,4 +133,32 @@ public Action<int, Func<int, int>> DisplayResult = delegate (int result, Func<in
 {
     Console.WriteLine(function(result));
 };
+```
+
+### Quantifiers ###
+- Lync has 3 types of quantifer operators
+	- ANY
+	- ALL
+	- CONTAINS
+
+```csharp
+LoadAssembly("Birdwatcher.dll");
+
+/*
+var birds = new List<Bird>
+{
+    new Bird { Name = "Cardinal", Color = "Red", Sightings = 3 },
+    new Bird { Name =  "Dove", Color = "White", Sightings = 2 },
+    new Bird { Name =  "Robin", Color = "Red", Sightings = 5 },
+    new Bird { Name =  "Canary", Color = "Yellow", Sightings = 0 },
+    new Bird { Name =  "Blue Jay", Color = "Blue", Sightings = 1 },
+    new Bird { Name =  "Crow", Color = "Black", Sightings = 11 },
+    new Bird { Name =  "Pidgeon", Color = "White", Sightings = 10 }
+};
+*/
+
+using BirdWatcher;
+var birds = BirdRepository.LoadBirds();
+birds.Any(b => b.Name == "Crow"); //true - has bird with name = Crow
+birds.Any(); //true - has birds
 ```
