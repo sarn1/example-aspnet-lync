@@ -4,7 +4,7 @@ https://teamtreehouse.com/library/querying-with-linq/
 
 #### What You'll Learn ####
 - Lync Queries
-- Delegates Types (part of functional programming), turning functionals into variables to be passed around.
+- Delegates (aka Anonymous Functions in PHP) Types (part of functional programming), turning functionals into variables to be passed around.
 
 ### Lync ###
 
@@ -114,3 +114,22 @@ var matchingBirds = from s in birds where s.Color == mysteryBird.Color select ne
 ```
 
 ### Delegates ###
+- See example in *Program.cs*.
+- `Delegates` = Anonymous Funcitons in PHP
+- `Func` allows anonymous function with input parameters
+- `Lambda` expression (x) `=>` x +2,`=>` is the lamba operator
+
+```csharp
+// lambda version
+// public Func<int, int> Square = (number) => 
+public Func<int, int> Square = delegate (int number)
+{
+    return number * number;
+};
+
+//  public Action<int, Func<int, int>> DisplayResult =  (result, function) =>
+public Action<int, Func<int, int>> DisplayResult = delegate (int result, Func<int, int> function)
+{
+    Console.WriteLine(function(result));
+};
+```

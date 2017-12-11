@@ -10,11 +10,6 @@ namespace Program
     {
         delegate void SayGreeting(string Name);
 
-        public static void SayGoodbye(string name)
-        {
-            Console.WriteLine(string.Format("Later, {0}", name));
-        }
-
         static void Main(string[] args)
         {
             // assigned SayGreeting to the delegate, this will be triggered only once.
@@ -23,14 +18,29 @@ namespace Program
                 Console.WriteLine(string.Format("Hello, {0}", name));
             };
 
+            Func<string, string> conversate = delegate (string message)
+             {
+                 Console.WriteLine(message);
+                 return Console.ReadLine();
+             };
+
+
             Console.WriteLine("Whats your name:");
             string input = Console.ReadLine();
-            sayGreeting(input);
-            Console.ReadLine(); // Hello
+            sayGreeting(input); // Hello
+            
+            //use this for lambda
+            //sayGreeting = (greeting) =>
+            sayGreeting = delegate (string name)
+            {
+                Console.WriteLine(string.Format("Later, {0}", name));
+            };
+            Console.ReadLine();
+            sayGreeting(input); //Later
+            Console.ReadKey();
 
-            sayGreeting = new SayGreeting(SayGoodbye);
-            sayGreeting(input);
-            Console.ReadKey(); // Later
+            // example using func
+            conversate("TEST");
         }
     }
 }
