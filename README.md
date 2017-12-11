@@ -2,6 +2,12 @@
 #### Examples using Lync
 https://teamtreehouse.com/library/querying-with-linq/
 
+#### What You'll Learn ####
+- Lync Queries
+- Delegates Types (part of functional programming), turning functionals into variables to be passed around.
+
+### Lync ###
+
 ```csharp
 List<int> numbers = new List<int> { 2, 4, 8, 16, 32, 64 };
 List<int> numbersGreaterThanTen = new List<int>();
@@ -106,3 +112,5 @@ var mysteryBird = new { Color = "White", Sightings = 3};
 //match birds in the list to the mystery bird
 var matchingBirds = from s in birds where s.Color == mysteryBird.Color select new { BirdName=s.Name };
 ```
+
+### Delegates ###
