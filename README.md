@@ -137,9 +137,9 @@ public Action<int, Func<int, int>> DisplayResult = delegate (int result, Func<in
 
 ### Quantifiers ###
 - Lync has 3 types of quantifer operators
-	- ANY
-	- ALL
-	- CONTAINS
+	- Any
+	- All
+	- Contains
 
 ```csharp
 LoadAssembly("Birdwatcher.dll");
@@ -162,3 +162,145 @@ var birds = BirdRepository.LoadBirds();
 birds.Any(b => b.Name == "Crow"); //true - has bird with name = Crow
 birds.Any(); //true - has birds
 ```
+
+### Element Operators ###
+- Single
+- SingleOrDefault
+- First
+- FirstOrDefault
+- Last
+- LastOrDefault
+- ElementAt
+- ElementAtOrDefault
+
+```csharp
+birds.Where(b => b.Name == "Crow").Single();
+birds.Single(b => b.Name == "Crow");
+birds.SingleOfDefault(b => b.Name == "Chickadee");
+birds.First();
+birds.Last();
+birds.First(b => b.Color == "Red");
+```
+- `SingleorDefault` if no match, provide default
+
+### Partioning ###
+- Take
+- Skip
+- TakeWhile
+- SkipWhile
+```csharp
+birds.OrderBy(b =>b.Name.Length).Skip(6).Take(3);
+birds.OrderBy(b =>b.Name.Length).TakeWhile(b => b.Name.Length < 6);
+```
+
+### Querying ###
+```csharp
+var colors = new List<string> { "Red", "Blue", "Purple" }
+var favoriteBirds = from b in birds 
+join c in colors or b.Color equals c 
+select b;
+
+//joins
+var FavoriteBirds = birds.Join(colors,
+b => b.color,
+c => c,
+(birds, color) => new { Color = color, Bird = bird });
+)
+
+var endangeredSightings = birds.Join(statuses, 
+	b => b.ConservationStatus,
+	s => s,
+	(b,s) => new {
+			Status = s,
+			Sightings = b.Sightings 
+		}.GroupBy(b => b.Status).Select(b => new {
+				Status = b.Key,
+				Sightings = b.Sum( s=> s.Sightings.Count()) 
+			}
+		);
+
+// complex example
+source.Where(s => search.CommonName == null || s.CommonName.Contains(search.CommonName))
+.Where(s=> search.Country == null || s.Habitats.Any(h => h.Country.Contains(search.Country)))
+.Where(s => search.Colors.Any(c => c == s.PrimaryColor) || search.Colors.Join(s.TertiaryColors,
+	sc => sc,
+	tc => tc,
+	(sc, tv) => (sc)).Any()
+	)
+.Skip page * pageSize
+.Take(20);
+
+var myBirds = new List<Bird> 
+{ 
+    new Bird { Name = "Cardinal", Color = "Red", Sightings = 3 },
+    new Bird { Name =  "Dove", Color = "White", Sightings = 2 },
+    new Bird { Name =  "Robin", Color = "Red", Sightings = 5 }
+};
+
+var yourBirds = new List<Bird> 
+{ 
+    new Bird { Name =  "Dove", Color = "White", Sightings = 2 },
+    new Bird { Name =  "Robin", Color = "Red", Sightings = 5 },
+    new Bird { Name =  "Canary", Color = "Yellow", Sightings = 0 }
+};
+
+// Create a variable named ourBirds and assign to it a LINQ query that is the result of a join from myBirds onto yourBirds using the Name property as the key. Make sure to return the birds that are the same between the two lists.
+var ourBirds = myBirds.Join(yourBirds, b=> b.Name , n=> n.Name,  (bird, name) => bird);
+```
+
+### Aggregates ###
+- Sum
+- Count
+- Min
+- Max
+- Average
+```csharp
+birds.Sum(b => b.Sightings);
+```
+
+### Set Operators ###
+- except
+- union
+- intersect
+- concat
+```csharp
+var colors = new List<string> { "Pink", "Blue", "Teal" };
+colors.Except(birds.Select(b = > b.Color).Distinct());
+```
+
+### Generation Operators ###
+- only works with int
+- Enumerable
+	- Empty
+	- Range
+	- Repeat
+	- DefaultIfEmpty
+```csharp
+// instead of this
+var numbers = new List<int>();
+for( int i = 0; i < 10; i++) {
+	numbers.Add(i);
+}
+
+// its this
+var numbers = Enumerable.Range(10,10);
+```
+
+### Conversion Operator ###
+- AsEnumerable
+- Cast
+- OfType
+- ToArray
+- ToDictionary
+- ToList
+- ToLookup
+
+### Summary ###
+- Quantifiers see if sequence fits a condition
+- Elements - to pick
+- Partiioning - to get subset
+- Joins - joining
+- Aggregate - to analyize
+- Set Operator - remove duplicates and merging
+- Generation - to generate
+- Conversion - to convert to different sequencing
